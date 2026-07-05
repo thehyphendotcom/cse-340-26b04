@@ -1,0 +1,29 @@
+{
+  "name": "cse-340-26b04",
+  "version": "1.0.0",
+  "description": "first node application at cse-340",
+  "homepage": "https://github.com/thehyphendotcom/cse-340-26b04#readme",
+  "bugs": {
+    "url": "https://github.com/thehyphendotcom/cse-340-26b04/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thehyphendotcom/cse-340-26b04.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "ejs": "^6.0.1",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
