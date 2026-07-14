@@ -61,3 +61,52 @@ VALUES
     'Unity Hope Pantry, 789 Pine Road', 
     '2026-11-05'
 );
+
+-- ========================================
+-- Categories Table
+-- ========================================
+CREATE TABLE categories (
+    -- Unique ID for each category
+    category_id SERIAL PRIMARY KEY,
+    
+    -- Name of the category (e.g., 'Environment', 'Education', 'Hunger Relief')
+    -- UNIQUE ensures we don't accidentally create duplicate categories
+    name VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- ========================================
+-- Service Project Categories (Junction Table)
+-- ========================================
+CREATE TABLE project_categories (
+    project_id INT NOT NULL REFERENCES projects(project_id) ON DELETE CASCADE,
+    category_id INT NOT NULL REFERENCES categories(category_id) ON DELETE CASCADE,
+    
+    -- The composite primary key prevents the exact same category 
+    -- from being assigned to the exact same project more than once
+    PRIMARY KEY (project_id, category_id)
+);
+
+-- ========================================
+-- Insert sample data: Categories
+-- ========================================
+INSERT INTO categories (name)
+VALUES 
+('Sustainability & Environment'), -- Will get ID: 1
+('Urban Agriculture'),           -- Will get ID: 2
+('Community & Hunger Relief');     -- Will get ID: 3
+
+
+-- ========================================
+-- Insert sample data: Linking Projects to Categories
+-- ========================================
+INSERT INTO project_categories (project_id, category_id)
+VALUES
+-- 1. Eco-Roof Installation (Project 1) belongs to Sustainability & Environment (Category 1)
+(1, 1),
+
+-- 2. Urban Garden Planting (Project 2) belongs to BOTH Environment (1) and Urban Agriculture (2)
+(2, 1),
+(2, 2),
+
+-- 3. Autumn Food Drive (Project 3) belongs to Community & Hunger Relief (Category 3)
+(3, 3);

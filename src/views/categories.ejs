@@ -1,4 +1,4 @@
-<%- include('partials/header') %>
+<!-- <%- include('partials/header') %>
     <main>
         <h1><%= title %></h1>
         <p>Here are our service categories:</p>
@@ -7,6 +7,18 @@
             <li><strong>Educational</strong></li>
             <li><strong>Community Service</strong></li>
             <li><strong>Health and Wellness</strong></li>
+        </ul>
+    </main>
+<%- include('partials/footer') %> -->
+
+<%- include('partials/header') %>
+    <main>
+        <h1><%= title %></h1>
+        <p>Here are our service categories:</p>
+        <ul>
+            <% categories.forEach(category => { %>
+                <li><strong><%= category.name %></strong></li>
+            <% }); %>
         </ul>
     </main>
 <%- include('partials/footer') %>
