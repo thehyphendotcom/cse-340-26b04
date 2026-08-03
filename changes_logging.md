@@ -70,3 +70,76 @@ Added a new service project details page at `/project/:id` and connected it to t
 ### 7. Added organization navigation to the project listing
 - Updated `src/views/projects.ejs` so each project row now includes a link to its organization details page.
 - The service project title continues to link to the project details page, so each row now supports navigation to both the service project and its parent organization.
+
+## Project Wiring Diagram
+
+```mermaid
+flowchart TD
+  Browser[Browser requests]
+  Routes[src/routes.js]
+
+  subgraph Controllers
+    HomeCtrl[src/controllers/index.js]
+    OrgCtrl[src/controllers/organizations.js]
+    ProjCtrl[src/controllers/projects.js]
+    CatCtrl[src/controllers/categories.js]
+    ErrCtrl[src/controllers/errors.js]
+  end
+
+  subgraph Models
+    OrgModel[src/models/organizations.js]
+    ProjModel[src/models/projects.js]
+    CatModel[src/models/categories.js]
+  end
+
+  subgraph Views
+    HomeView[src/views/home.ejs]
+    OrgListView[src/views/organizations.ejs]
+    OrgDetailView[src/views/organization.ejs]
+    ProjListView[src/views/projects.ejs]
+    ProjDetailView[src/views/project.ejs]
+    CatView[src/views/categories.ejs]
+    Err404[src/views/errors/404.ejs]
+    Err500[src/views/errors/500.ejs]
+  end
+
+  DB[(PostgreSQL)]
+
+  Browser --> Routes
+  Routes --> HomeCtrl --> HomeView
+  Routes --> OrgCtrl --> OrgListView
+  Routes --> ProjCtrl --> ProjListView
+  Routes --> CatCtrl --> CatView
+  Routes --> ErrCtrl --> Err404
+
+  OrgCtrl --> OrgModel --> DB
+  OrgCtrl --> OrgDetailView
+  ProjCtrl --> ProjModel --> DB
+  ProjCtrl --> ProjDetailView
+  CatCtrl --> CatModel --> DB
+
+  OrgListView --> OrgDetailView
+  ProjListView --> ProjDetailView
+  ProjListView --> OrgDetailView
+  OrgDetailView --> ProjDetailView
+```
+
+## Function Reference
+
+### Controllers
+- `showHomePage` in `src/controllers/index.js` builds the home page response by setting the page title to `Home` and rendering `home.ejs`.
+- `showOrganizationsPage` in `src/controllers/organizations.js` loads every organization from the database, sets the title to `Our Partner Organizations`, and renders `organizations.ejs` with the organization list.
+- `showOrganizationDetailsPage` in `src/controllers/organizations.js` reads `req.params.id`, fetches one organization plus its related projects, sets the title to `Organization Details`, and renders `organization.ejs` with both data sets.
+- `showProjectsPage` in `src/controllers/projects.js` calls `getUpcomingProjects(NUMBER_OF_UPCOMING_PROJECTS)` so the main projects page shows only the next five upcoming projects, then renders `projects.ejs` with the title `Upcoming Service Projects`.
+- `showProjectDetailsPage` in `src/controllers/projects.js` reads the project id from `req.params.id`, calls `getProjectDetails(id)`, and renders `project.ejs` with the returned project record.
+- `showCategoriesPage` in `src/controllers/categories.js` loads all categories, sets the title to `Service Categories`, and renders `categories.ejs`.
+- `testErrorPage` in `src/controllers/errors.js` creates a test error with status `500` and forwards it to Express error handling through `next(error)`.
+
+### Models
+- `getAllOrganizations` in `src/models/organizations.js` runs a query against `public.organization` and returns every organization row for the organizations list page.
+- `getOrganizationDetails` in `src/models/organizations.js` looks up a single organization by `organization_id` and returns the first matching row, or `null` when no match exists.
+- `getAllProjects` in `src/models/projects.js` returns all project rows joined with the organization name, ordered by project date.
+- `getProjectsByOrganizationId` in `src/models/projects.js` returns the projects that belong to a single organization, using the provided organization id and sorting by project date.
+- `getUpcomingProjects` in `src/models/projects.js` filters projects to only those on or after the current date, orders them from soonest to latest, and limits the result to the requested number of rows.
+- `getProjectDetails` in `src/models/projects.js` fetches one project by project id and returns the first row from the query result.
+- `getAllCategories` in `src/models/categories.js` returns every category ordered alphabetically by category name.
