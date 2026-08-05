@@ -1,7 +1,7 @@
 import express from 'express';
 
 import { showHomePage } from './controllers/index.js';
-import { showOrganizationsPage } from './controllers/organizations.js';
+import { showOrganizationsPage, showNewOrganizationForm } from './controllers/organizations.js';
 import { showProjectsPage, showProjectDetailsPage } from './controllers/projects.js';
 import { showCategoriesPage, showCategoryDetailsPage } from './controllers/categories.js';
 import { testErrorPage } from './controllers/errors.js';
@@ -20,6 +20,9 @@ router.get('/category/:id', showCategoryDetailsPage);
 
 // Route for organization details page
 router.get('/organization/:id', showOrganizationDetailsPage);
+
+// Route for new organization page
+router.get('/new-organization', showNewOrganizationForm);
 
 //error-handling routes
 router.get('/test-error', testErrorPage);
