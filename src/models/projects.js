@@ -121,19 +121,11 @@ const createProject = async (title, description, location, date, organizationId)
     return result.rows[0].project_id;
 };
 
-// Aliases for flexibility across calling conventions
-const getProjectsByCategory = getProjectsByCategoryId;
-const getProjectsForCategory = getProjectsByCategoryId;
-const getServiceProjectsForCategory = getProjectsByCategoryId;
-
 export {
     getAllProjects,
     getProjectsByOrganizationId,
     getUpcomingProjects,
     getProjectDetails,
     getProjectsByCategoryId,
-    getProjectsByCategory,
-    getProjectsForCategory,
-    getServiceProjectsForCategory,
     createProject
 };
