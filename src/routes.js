@@ -2,7 +2,7 @@ import express from 'express';
 
 import { showHomePage } from './controllers/index.js';
 import { showOrganizationsPage, showNewOrganizationForm, processNewOrganizationForm, organizationValidation, showOrganizationDetailsPage, showEditOrganizationForm, processEditOrganizationForm } from './controllers/organizations.js';
-import { showProjectsPage, showProjectDetailsPage, showNewProjectForm, processNewProjectForm, projectValidation, showEditProjectForm, processEditProjectForm } from './controllers/projects.js';
+import { showProjectsPage, showProjectDetailsPage, showNewProjectForm, processNewProjectForm, projectValidation, showEditProjectForm, processEditProjectForm, processAddVolunteer, processRemoveVolunteer } from './controllers/projects.js';
 import { showCategoriesPage, showCategoryDetailsPage, showAssignCategoriesForm, processAssignCategoriesForm, categoryValidation, showNewCategoryForm, processNewCategoryForm, showEditCategoryForm, processEditCategoryForm } from './controllers/categories.js';
 import { showUserRegistrationForm, processUserRegistrationForm, showLoginForm, processLoginForm, processLogout, requireLogin, showDashboard, requireRole, showUsersPage } from './controllers/users.js';
 import { testErrorPage } from './controllers/errors.js';
@@ -65,6 +65,10 @@ router.get('/dashboard', requireLogin, showDashboard);
 
 // Route for users list page (Admin only)
 router.get('/users', requireRole('admin'), showUsersPage);
+
+// Routes for project volunteering (requires login)
+router.post('/project/:id/volunteer', requireLogin, processAddVolunteer);
+router.post('/project/:id/unvolunteer', requireLogin, processRemoveVolunteer);
 
 //error-handling routes
 router.get('/test-error', testErrorPage);

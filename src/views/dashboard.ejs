@@ -11,6 +11,28 @@
         <p><a href="/users">Manage Registered Users</a></p>
     <% } %>
 
+    <section style="margin-top: 2rem;">
+        <h2>Projects You Are Volunteering For</h2>
+        <% if (volunteeredProjects && volunteeredProjects.length > 0) { %>
+            <ul>
+                <% volunteeredProjects.forEach(p => { %>
+                    <li style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                        <div>
+                            <a href="/project/<%= p.project_id %>"><strong><%= p.title %></strong></a> 
+                            — <%= p.location %> (<%= new Date(p.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %>)
+                        </div>
+                        <form action="/project/<%= p.project_id %>/unvolunteer" method="POST" style="margin:0; padding:0; border:none; box-shadow:none; background:transparent; width:auto;">
+                            <input type="hidden" name="fromDashboard" value="true">
+                            <button type="submit" style="background:#dc3545; padding:0.4rem 0.85rem; font-size:0.875rem; width:auto;">Remove Volunteer Status</button>
+                        </form>
+                    </li>
+                <% }); %>
+            </ul>
+        <% } else { %>
+            <p>You have not signed up to volunteer for any projects yet.</p>
+        <% } %>
+    </section>
+
 </main>
 
 <%- include('partials/footer') %>

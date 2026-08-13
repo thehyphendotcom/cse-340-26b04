@@ -26,9 +26,25 @@
                     <% }); %>
                 </ul>
             <% } %>
+
+            <% if (isLoggedIn) { %>
+                <div style="margin-top: 1.5rem; text-align: center;">
+                    <% if (isVolunteering) { %>
+                        <p><strong>You are volunteering for this project!</strong></p>
+                        <form action="/project/<%= projectDetails.project_id %>/unvolunteer" method="POST" style="max-width:320px; padding:0; border:none; box-shadow:none; background:transparent;">
+                            <button type="submit" style="background:#dc3545; width:100%;">Remove yourself as a volunteer</button>
+                        </form>
+                    <% } else { %>
+                        <form action="/project/<%= projectDetails.project_id %>/volunteer" method="POST" style="max-width:320px; padding:0; border:none; box-shadow:none; background:transparent;">
+                            <button type="submit" style="width:100%;">Volunteer for this project</button>
+                        </form>
+                    <% } %>
+                </div>
+            <% } %>
+
             <% if (user && user.role_name === 'admin') { %>
-            <p><a href="/assign-categories/<%= projectDetails.project_id %>">Edit Categories</a></p>
-            <p><a href="/edit-project/<%= projectDetails.project_id %>">Edit Project</a></p>
+                <p style="margin-top: 1.5rem;"><a href="/assign-categories/<%= projectDetails.project_id %>">Edit Categories</a></p>
+                <p><a href="/edit-project/<%= projectDetails.project_id %>">Edit Project</a></p>
             <% } %>
         </section>
     <% } else { %>
